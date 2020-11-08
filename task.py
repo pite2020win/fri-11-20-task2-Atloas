@@ -31,16 +31,39 @@
 
 import json
 
+
 def load_from_file(filename):
   with open(filename, "r") as file:
     return json.load(file)
+
 
 def save_to_file(data, filename):
   with open(filename, "w") as file:
     json.dump(data, file)
 
+
+def add_school(data, name):
+  data["schools"].append({"name": name, "sclasses": []})
+  return data
+
+
+def add_class(school, name):
+  school["classes"].append({"name": name, "students": []})
+  return school
+
+
+def get_school_by_name(data, name):
+  return list(filter(lambda school: school["name"] == name, data["schools"]))[0]
+
+
+def get_sclass_by_name(school, name):
+  return list(filter(lambda sclass: sclass["name"] == name, school["sclasses"]))[0]
+
+
 if __name__ == "__main__":
-  school = load_from_file("data.json")
-  print(school)
-  print(type(school))
-  save_to_file(school, "test.json")
+  data = load_from_file("data.json")
+  add_school(data, "TESTSCHOOL")
+  school2 = get_school_by_name(data, "Liceum Ogólnokształcące im. Stanisława Staszica nr 1 w Krakowie")
+  school2["sclasses"].append({"name": "TEST"})
+
+  save_to_file(data, "test.json")
